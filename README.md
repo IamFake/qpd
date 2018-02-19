@@ -9,6 +9,8 @@ By default debug output is turned off in base.h by defining
 QT_NO_DEBUG_OUTPUT macro, comment it if you need debug output during
 calculation and drawing (it's a bit chaotic).
 
+@todo improve docs
+
 ## Qpd::Document
 Document class holds current position and dimensions of the page. Also
 Document becomes a parent for all other elements and delete they
@@ -33,7 +35,7 @@ Configuring printer and painter
 Call *end* on painter (end drawing and start actual printing)
 
 ## Qpd::Text
-Text is basic element wich draw a string.
+Text is basic element which draw a string.
 
 You could create Text with QString or with QStringList
 
@@ -67,9 +69,10 @@ Can have borders, margins, paddings, child alignment.
 - topts **Qpd::Options** options for current block
 - talign **Qpd::Align** alignment for current block
 - text **Qpd::Text** shorthand if we need only one text node in block 
-- objMark **QString** mark for object (for debug)
-
-
+- objMark **QString** mark for object (for debug)  
+  
+  
+  
     auto doc = new Qpd::Document();
     doc->printStart(true, QGuiApplication::applicationDirPath() + "/test.qpd.pdf");
      
