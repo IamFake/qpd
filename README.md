@@ -70,9 +70,10 @@ Can have borders, margins, paddings, child alignment.
 - talign **Qpd::Align** alignment for current block
 - text **Qpd::Text** shorthand if we need only one text node in block 
 - objMark **QString** mark for object (for debug)  
-  
-  
-  
+
+
+Example:
+
     auto doc = new Qpd::Document();
     doc->printStart(true, QGuiApplication::applicationDirPath() + "/test.qpd.pdf");
      
