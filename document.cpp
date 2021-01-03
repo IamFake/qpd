@@ -19,9 +19,48 @@ Document::~Document() {
     delete printer;
 }
 
-void Document::printStart(bool pdf, QString const &pdfFilename) {
+void Document::previewDialogInit() {
+    auto localPrinter = new QPrinter();
+    preview = new QPrintPreviewDialog(localPrinter);
+
+    QObject::connect(preview, &QPrintPreviewDialog::paintRequested, [this] (QPrinter * actualPrinter) {
+        printerPreviewInit(actualPrinter);
+        emit dialogIsReady(this);
+    });
+    QObject::connect(preview, &QPrintPreviewDialog::finished, [this] {
+        preview->deleteLater();
+
+        emit printingEnd();
+        deleteLater();
+    });
+
+    preview->open();
+}
+
+void Document::printerPreviewInit(QPrinter * actualPrinter) {
+    printer = actualPrinter;
+
+    preparePaint(false, "");
+}
+
+void Document::previewDialogPaintEnd() const {
+    painter->end();
+}
+
+void Document::printerStandardInit(bool pdf, QString const &pdfFilename) {
     printer = new QPrinter();
 
+    preparePaint(pdf, pdfFilename);
+}
+
+void Document::printerStandardEnd() {
+    painter->end();
+
+    emit printingEnd();
+    deleteLater();
+}
+
+void Document::preparePaint(bool pdf, QString const &pdfFilename) {
     QPageLayout layout;
     layout.setUnits(QPageLayout::Millimeter);
     layout.setPageSize(QPageSize(QPageSize::A4));
@@ -73,23 +112,16 @@ void Document::printStart(bool pdf, QString const &pdfFilename) {
     painter->setPen(pen);
 
     painter->setRenderHints(
-        QPainter::TextAntialiasing |
-        QPainter::HighQualityAntialiasing,
-        true
+            QPainter::TextAntialiasing |
+            QPainter::HighQualityAntialiasing,
+            true
     );
     painter->setRenderHints(
-        QPainter::Antialiasing | QPainter::SmoothPixmapTransform,
-        false
+            QPainter::Antialiasing | QPainter::SmoothPixmapTransform,
+            false
     );
 
     position.x = position.y = 0;
-}
-
-void Document::printEnd() {
-    painter->end();
-
-    emit printingEnd();
-    deleteLater();
 }
 
 bool Document::switchOrientation(Orientation newOrientation) {

@@ -1,17 +1,16 @@
-#include <QProcess>
-#include <QCoreApplication>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QTimer>
 
 #include "wrap.h"
 
 int main(int argc, char **argv) {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     Wrap w;
     QObject::connect(&w, &Wrap::finished, &app, &QGuiApplication::quit);
 
-    QTimer::singleShot(0, &w, &Wrap::start);
+//    QTimer::singleShot(0, &w, &Wrap::start); // print to pdf
+    QTimer::singleShot(0, &w, &Wrap::startDialog2); // preview dialog
 
     return app.exec();
 }

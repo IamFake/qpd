@@ -14,6 +14,11 @@ namespace Qpd {
 
     class Document : public QObject {
     Q_OBJECT
+    private:
+        void preparePaint(bool, QString const &);
+
+        void printerPreviewInit(QPrinter *);
+
     public:
         itemSize size;
         itemPosition position;
@@ -33,9 +38,13 @@ namespace Qpd {
 
         ~Document() override;
 
-        void printStart(bool pdf, QString const &pdfFilename = "");
+        void printerStandardInit(bool pdf, QString const &pdfFilename = "");
 
-        void printEnd();
+        void printerStandardEnd();
+
+        void previewDialogInit();
+
+        void previewDialogPaintEnd() const;
 
         bool switchOrientation(Orientation newOrientation);
 
@@ -54,6 +63,8 @@ namespace Qpd {
         void printingStart();
 
         void printingEnd();
+
+        void dialogIsReady(Qpd::Document *);
     };
 }
 

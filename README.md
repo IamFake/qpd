@@ -1,6 +1,6 @@
 # Qpd: Qt Print Document library
 
-Qpd library allowing programmatically create simple documents and print to
+Qpd library allow programmatically create simple documents and print to
 QPrinter (on real printer or to PDF files).
 
 Wide range of examples can be found in wrap.cpp file.
@@ -20,18 +20,18 @@ Every element should be instantiated with Document as a parent.
 To draw element to QPainter you must call **draw** method on him.
 
     auto doc = new Qpd::Document();
-    doc->printStart(true, QGuiApplication::applicationDirPath() + "/test.qpd.pdf");
+    doc->printerStandardInit(true, QGuiApplication::applicationDirPath() + "/test.qpd.pdf");
     ...
-    doc->printEnd();
+    doc->printerStandardEnd();
 
-#### Qpd::Document::printStart
+#### Qpd::Document::printerStandardInit
 Configuring printer and painter
 
 **arguments**
 - PDF **bool** (print to pdf or to printer)
 - Filename **QString** PDF file name
 
-#### Qpd::Document::printEnd
+#### Qpd::Document::printerStandardEnd
 Call *end* on painter (end drawing and start actual printing)
 
 ## Qpd::Text
@@ -45,11 +45,11 @@ You could create Text with QString or with QStringList
 Can have margins (through Qpd::Options)
 
     auto doc = new Qpd::Document();
-    doc->printStart(true, QGuiApplication::applicationDirPath() + "/test.qpd.pdf");
+    doc->printerStandardInit(true, QGuiApplication::applicationDirPath() + "/test.qpd.pdf");
      
     (new Text(doc, Position::CENTER, "String to draw"))->draw();
      
-    doc->printEnd();
+    doc->printerStandardEnd();
 
 ## Qpd::Block
 Block is responsible for positioning and grouping of Qpd::Text or other
@@ -75,7 +75,7 @@ Can have borders, margins, paddings, child alignment.
 Example:
 
     auto doc = new Qpd::Document();
-    doc->printStart(true, QGuiApplication::applicationDirPath() + "/test.qpd.pdf");
+    doc->printerStandardInit(true, QGuiApplication::applicationDirPath() + "/test.qpd.pdf");
      
     (new Block(doc))
     ->addCell(
@@ -86,7 +86,7 @@ Example:
     )
     ->draw();
      
-    doc->printEnd();
+    doc->printerStandardEnd();
 
 `Qpd::Block::addCell(Stackable *stack, uint width = 0)`  
 Add cell (child) and set explicit width to it

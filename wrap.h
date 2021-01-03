@@ -9,6 +9,10 @@ Q_OBJECT
 public slots:
 
     void start();
+    void startDialog();
+    void endDialog();
+    void fillDialog(Qpd::Document *doc);
+    void startDialog2();
     void print(QPainter *, Qpd::Document *);
 
 signals:

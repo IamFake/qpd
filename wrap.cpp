@@ -11,17 +11,45 @@ using namespace Qpd;
 
 void Wrap::start() {
     auto doc = new Qpd::Document();
-    doc->printStart(true, QGuiApplication::applicationDirPath() + "/test.qpd.pdf");
+    doc->printerStandardInit(true, QGuiApplication::applicationDirPath() + "/test.qpd2.pdf");
     print(doc->painter, doc);
-    doc->printEnd();
+    doc->printerStandardEnd();
 
-    qDebug() << "Here is " << QGuiApplication::applicationDirPath() + "/test.qpd.pdf";
+    qDebug() << "Here is " << QGuiApplication::applicationDirPath() + "/test.qpd2.pdf";
 
     // xdg-open for Linux
     // @todo add for windows
-    QProcess::startDetached("xdg-open " + QGuiApplication::applicationDirPath() + "/test.qpd.pdf");
+    QProcess::startDetached("xdg-open " + QGuiApplication::applicationDirPath() + "/test.qpd2.pdf");
 
     emit finished();
+}
+
+void Wrap::startDialog() {
+    auto doc = new Qpd::Document();
+    QObject::connect(doc, &Qpd::Document::dialogIsReady, this, &Wrap::fillDialog);
+    QObject::connect(doc, &Qpd::Document::printingEnd, this, &Wrap::endDialog);
+    doc->previewDialogInit();
+}
+
+void Wrap::fillDialog(Qpd::Document * doc) {
+    print(doc->painter, doc);
+    doc->previewDialogPaintEnd();
+}
+
+void Wrap::endDialog() {
+    emit finished();
+}
+
+void Wrap::startDialog2() {
+    auto doc = new Qpd::Document();
+    QObject::connect(doc, &Qpd::Document::dialogIsReady, [this] (Qpd::Document * doc) {
+        print(doc->painter, doc);
+        doc->previewDialogPaintEnd();
+    });
+    QObject::connect(doc, &Qpd::Document::printingEnd, [this] {
+        emit finished();
+    });
+    doc->previewDialogInit();
 }
 
 void Wrap::print(QPainter *p, Document *doc) {
